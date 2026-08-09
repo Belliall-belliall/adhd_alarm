@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "671343296032",
+    "project_id": "adhd-alarms",
+    "storage_bucket": "adhd-alarms.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671343296032:android:f3245e9070eb9f12fd4645",
+        "android_client_info": {
+          "package_name": "com.adhd.alarm.wife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBTW-JLeun9Cun7qV8jHrVtei82vVAfrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671343296032:android:6bb3c54498c72c62fd4645",
+        "android_client_info": {
+          "package_name": "com.example.adhd_alarm_wife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBTW-JLeun9Cun7qV8jHrVtei82vVAfrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
