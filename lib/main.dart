@@ -1,61 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz_data;
-import 'firebase_options.dart';
-import 'screens/home_screen.dart';
-import 'screens/alarms_screen.dart';
+// Importuj swoje istniejące ekrany oraz plik firebase_options.dart (jeśli używasz)
+// import 'firebase_options.dart';
 
 void main() async {
+  // 1. Wymagane przed inicjalizacją jakichkolwiek wtyczek natywnych (Firebase, Alarmy itp.)
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicjalizacja stref czasowych – MUSI być przed wszystkim innym
-  tz_data.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Europe/Warsaw'));
-
-  // Inicjalizacja Firebase
+  // 2. Bezpieczna inicjalizacja Firebase z obsługą błędów
   try {
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+      // options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (e) {
-    debugPrint('Błąd inicjalizacji Firebase: $e');
+    debugPrint('Błąd podczas inicjalizacji Firebase: $e');
   }
 
-  // Inicjalizacja powiadomień
-  try {
-    const AndroidInitializationSettings androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings settings =
-        InitializationSettings(android: androidSettings);
-    await globalNotifications.initialize(settings);
-    await globalNotifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.requestNotificationsPermission();
-  } catch (e) {
-    debugPrint('Błąd inicjalizacji powiadomień: $e');
-  }
+  // 3. Globalne wyłapywanie błędów UI (zapobiega "czerwonemu ekranowi błędu" u użytkownika)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    debugPrint('Błąd Flutter UI: ${details.exception}');
+  };
 
-  runApp(const MyApp());
+  runApp(const AdhdHelperApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AdhdHelperApp extends StatelessWidget {
+  const AdhdHelperApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ADHD Alarm',
+      title: 'ADHD Helper',
       debugShowCheckedModeBanner: false,
+      
+      // Spójny motyw zapobiegający przebodźcowaniu (Low-arousal Design)
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2B6CB0),
-        ),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF4C6EF5),
+          brightness: Brightness.light,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF8F9FA),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+        ),
       ),
-      home: const HomeScreen(),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF4C6EF5),
+          brightness: Brightness.dark,
+        ),
+        scaffoldBackgroundColor: const Color(0xFF121212),
+      ),
+      themeMode: ThemeMode.system, // Automatyczne dostosowanie do systemu
+
+      // Tutaj wskaż swój główny ekran startowy
+      home: const MainHomeScreen(), 
+    );
+  }
+}
+
+// Zastąp poniższy zaślepkę swoim właściwym ekranem głównym z istniejącego projektu
+class MainHomeScreen extends StatelessWidget {
+  const MainHomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text('ADHD Helper - Ekran Główny'),
+      ),
     );
   }
 }
